@@ -1,0 +1,189 @@
+<!DOCTYPE HTML>
+{% load static %}
+<html>
+<head>
+    <title>NotePy</title>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="{% static 'css/font-awesome-animation.min.css' %}">
+    <link rel='stylesheet' href="{% static 'css/fonts.css' %}" type='text/css' charset='utf-8'/>
+    <link rel='stylesheet' href="{% static 'css/style.css' %}"/>
+
+</head>
+<body onload="brython()" spellcheck="false">
+<div class="bg" id="bg"></div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" id="main">
+    <a class="navbar-brand" href="/" id="brand"><i class="fas fa-sticky-note faa-shake" id="brand-icon"></i>NOTEPY</a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <button class="note-add" id="add-note" data-toggle='modal' data-target='#add-note-modal'><i
+                        class="fas fa-edit faa-shake" id="add-note-icon"></i>Add A Note
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="note-color" id="color-changer"><i class="fas fa-swatchbook" id="color-changer-icon"></i>Change
+                    Note Color
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="note-search" id="note-search"><i class="fas fa-search" id="note-search-icon"></i>Search
+                    Notes
+                </button>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <button class="log-in" id="log-in" data-toggle="modal"
+                        data-target="#log-in-modal" data-backdrop="static"><i class="fas fa-sign-in-alt"
+                                                                              id="log-in-icon"></i></i>Log In
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="sign-up" id="sign-up" data-toggle="modal"
+                        data-target="#sign-up-modal" data-backdrop="static"><i class="fas fa-user-plus"
+                                                                               id="sign-up-icon"></i>Sign Up
+                </button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" id="color-bar" style="display: none">
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <button class="color-button-green" value="#BFE79F" id="green-color-button"></button>
+            </li>
+            <li class="nav-item">
+                <button class="color-button-yellow" value="#FAEB74" id="yellow-color-button"></button>
+            </li>
+            <li class="nav-item">
+                <button class="color-button-orange" value="#FEC888" id="orange-color-button"></button>
+            </li>
+            <li class="nav-item">
+                <button class="color-button-purple" value="#C197D1" id="purple-color-button"></button>
+            </li>
+            <li class="nav-item">
+                <button class="color-button-pink" value="#F8A3C4" id="pink-color-button"></button>
+            </li>
+            <li class="nav-item">
+                <button class="color-button-blue" value="#81DED8" id="blue-color-button"></button>
+            </li>
+            <li class="nav-item">
+                <div class="active-color-label">Active Note Color:</div>
+                <div class="active-color" id="active-color" style="background: #BFE79F; border-color: #A7CA8B"></div>
+            </li>
+        </ul>
+    </div>
+</nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" id="search-bar" style="display: none">
+    <div class="collapse navbar-collapse">
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" onkeydown="return (event.keyCode!=13);" placeholder="Enter keywords"
+                   aria-label="Search" id="search-params">
+            <a class="search-button" id="search-button">Search</a>
+            <a class="end-search-button" id="end-search-button" style="display: none">End
+                Search
+            </a>
+            <div class="results" style="display: none" id="results"></div>
+        </form>
+    </div>
+</nav>
+<div id="note-frame"></div>
+<div class="modal" id="log-in-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Log In</h5>
+                <div type="button" class="modal-close-button" data-dismiss="modal" aria-label="Close" id="log-in-close">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" id="log-in-form">
+                    <div class='form-group'>
+                        <input id='log-in-email' class='form-control input-group-sm' type='email' name='email'
+                               placeholder='Email'>
+                    </div>
+                    <div class='form-group'>
+                        <input id='log-in-password' class='form-control input-group-sm' type='password' name='password'
+                               placeholder='Password'>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="submit-button" id="log-in-button">
+                    <i class="fas fa-arrow-right" style="margin: 0"></i></button>
+            </div>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                     aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%; display: none"
+                     id="log-in-progress"></div>
+            </div>
+        </div>
+    </div>
+    <div id="log-in-toast" class="toast"></div>
+</div>
+<div class="modal" id="sign-up-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sign Up</h5>
+                <div type="button" class="modal-close-button" data-dismiss="modal" aria-label="Close"
+                     id="sign-up-close">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" id="sign-up-form">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6" id="firstname">
+                                <input id="sign-up-first-name" class="form-control input-group-sm reg_name" type="text"
+                                       name="first-name" placeholder="First Name">
+                            </div>
+                            <div class="col-sm-6" id="lastname">
+                                <input id="sign-up-last-name" class="form-control input-group-sm reg_name" type="text"
+                                       name="last-name" placeholder="Last Name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <input id='sign-up-email' class='form-control input-group-sm' type='email' name='email'
+                               placeholder='Email'>
+                    </div>
+                    <div class='form-group'>
+                        <input id='sign-up-password' class='form-control input-group-sm' type='password' name='password'
+                               placeholder='Password'>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="submit-button" id="sign-up-button"><i
+                        class="fas fa-arrow-up"></i></button>
+            </div>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                     aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%; display: none"
+                     id="sign-up-progress"></div>
+            </div>
+        </div>
+    </div>
+    <div id="sign-up-toast" class="toast"></div>
+</div>
+
+<script src="{% static 'py/authentication.py' %}" type="text/python"></script>
+<script src="{% static 'py/note.py' %}" type="text/python"></script>
+<script src="{% static 'py/style.py' %}" type="text/python"></script>
+<script src='https://kit.fontawesome.com/2026b88aeb.js' crossorigin='anonymous'></script>
+<script src='https://code.jquery.com/jquery-3.5.0.js'></script>
+<script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.js'></script>
+<script type="text/javascript"
+        src="{% static 'js/brython.js' %}">
+</script>
+<script type="text/javascript"
+        src="{% static 'js/brython_stdlib.js' %}">
+</script>
+
+</body>
+</html>

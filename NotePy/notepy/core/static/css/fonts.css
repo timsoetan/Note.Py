@@ -1,0 +1,18 @@
+@font-face {
+    font-family: 'TradeGothic LT Bold';
+    src: url('TradeGothicLT-Bold.woff2') format('woff2'),
+        url('TradeGothicLT-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Saycheez';
+    src: url('WTF Saycheez W01 Regular.woff2') format('woff2'),
+        url('WTF Saycheez W01 Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
